@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="app-ui">
+<header>
+    <!-- Meta -->
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+        <!-- Document title -->
+        <title></title>
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="../static/assets/img/favicons/apple-touch-icon.png" />
+        <link rel="icon" href="../static/assets/img/favicons/favicon.ico" />
+
+        <!-- Google fonts -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,900%7CRoboto+Slab:300,400%7CRoboto+Mono:400" />
+
+
+        <!-- AppUI CSS stylesheets -->
+        <link rel="stylesheet" id="css-font-awesome" href="../static/assets/css/font-awesome.css" />
+        <link rel="stylesheet" id="css-ionicons" href="../static/assets/css/ionicons.css" />
+        <link rel="stylesheet" id="css-bootstrap" href="../static/assets/css/bootstrap.css" />
+        <link rel="stylesheet" id="css-app" href="../static/assets/css/app.css" />
+        <link rel="stylesheet" id="css-app-custom" href="../static/assets/css/app-custom.css" />
+</header>
+<body>
+    <div class="container">
+        <!--1. 按钮-->
+        <button class="btn btn-default" type="button" id="b" name="lr">展示进度条测试数据</button>
+	    <!--2. 进度条-->
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                 style="width: 1%;" id="lr">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" >
+                <div class="card" style="height: 400px">
+                    <div class="card-header">
+                        <h4>同一模型中不同属性的解释性分析</h4>
+                        <ul class="card-actions">
+                            <li>
+                                <button type="button"><i class="ion-more"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-block" >
+                    <form class="form-horizontal" action="/show_explain/entire_1" method="post" enctype="multipart/form-data" id="entire_fm_1">
+                        <div class="form-group" >
+                        <label for="model_name">选择模型</label>
+                            <select class="form-control" id="model_name" name="model_name" size="1" style="font-size:12pt">
+                                {% for model in model_name %}
+                                    <option value={{ model}} >{{ model}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" >
+                            <label for="example-select">查看特征</label>
+                            <select class="form-control" id="feature_name" name="feature_name" size="1" style="font-size:12pt">
+                                {% for feature in expline_feature %}
+                                    <option value={{ feature}} >{{ feature}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" >
+                            <button class="btn btn-app" type="button" style="font-size:14pt" id="entire_bt_1" >提交可解释分析</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div class="col-sm-6" >
+                <div class="card" style="height: 400px" id="chart1">
+                    <div class="card-header">
+                        <h4>同一模型中不同属性的解释性分析</h4>
+                        <ul class="card-actions">
+                            <li>
+                                <button type="button"><i class="ion-more"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-block">
+                        <div id="mypie1" style="height: 400px;width:100%"></div>
+                    </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" >
+                <div class="card" style="height: 400px">
+                    <div class="card-header">
+                        <h4>同一属性在不同模型中的解释性分析</h4>
+                        <ul class="card-actions">
+                            <li>
+                                <button type="button"><i class="ion-more"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-block" >
+                    <form class="form-horizontal" action="http://www.baidu.com" method="post" enctype="multipart/form-data" onsubmit="return false;">
+                        <div class="form-group" >
+                            <select class="form-control" id="example-select" name="example-select" size="1" style="font-size:16pt">
+                                {% for model in model_name %}
+                                    <option value={{ model}} >{{ model}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" >
+                            <button class="btn btn-app" type="submit" style="font-size:14pt" >选择属性</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div class="col-sm-6" >
+                <div class="card" style="height: 400px">
+                    <div class="card-header">
+                        <h4>同一属性在不同模型中的解释性分析</h4>
+                        <ul class="card-actions">
+                            <li>
+                                <button type="button"><i class="ion-more"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-block" >
+                    <form class="form-horizontal" action="http://www.baidu.com" method="post" enctype="multipart/form-data" onsubmit="return false;">
+                        <div class="form-group" >
+                            <select class="form-control" id="example-select" name="example-select" size="1" style="font-size:16pt">
+                                {% for model in model_name %}
+                                    <option value={{ model}} >{{ model}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" ></div>
+                        <div class="form-group" >
+                            <button class="btn btn-app" type="submit" style="font-size:14pt" >选择属性</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../static/assets/js/core/jquery.min.js"></script>
+    <script src="../static/assets/js/core/bootstrap.min.js"></script>
+    <script src="../static/assets/js/core/jquery.slimscroll.min.js"></script>
+    <script src="../static/assets/js/core/jquery.scrollLock.min.js"></script>
+    <script src="../static/assets/js/core/jquery.placeholder.min.js"></script>
+    <script src="../static/assets/js/app.js"></script>
+    <script src="../static/assets/js/app-custom.js"></script>
+
+    <!-- Page Plugins -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <script>
+    var btn = document.getElementById('b')
+    function listen(element){
+        element.addEventListener('click',function(){
+        url = '/show_process/' + this.name
+        var sitv = setInterval(function (){
+             $.getJSON(url,function(data){
+                 console.log(data.res+'%')
+                 document.getElementById(element.name).style.width = data.res+'%'
+                 if (data.res == '99'){
+                     clearInterval(sitv)
+                 }
+             })
+        },1000)
+        var this_url = '/train_process/' + this.name
+        var name = this.name
+        $.getJSON(this_url,function (data){
+            clearInterval(sitv)
+            if(data.res != null){
+                document.getElementById(element.name).style.width = '100%'
+                alert(name + '：模型训练成功')
+            }
+            else{
+                document.getElementById(element.name).class = 'progress-bar-danger'
+                alert(name + '：模型训练失败')
+            }
+        })
+    })
+    }
+    listen(btn)
+</script>
+    <script>
+        var chart1 = document.getElementById("chart1")
+        var entire_bt_1 = document.getElementById("entire_bt_1");
+        entire_bt_1.addEventListener('click',function(){
+            $.ajax({
+                type: "POST",
+                url:"/show_explain/entire_1",
+                data:$('#entire_fm_1').serialize(),
+                dataType:'json',
+                success:function (){
+                    var option1 = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 335, name: '直接访问'},
+                        {value: 310, name: '邮件营销'},
+                        {value: 234, name: '联盟广告'},
+                        {value: 135, name: '视频广告'},
+                        {value: 1548, name: '搜索引擎'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+                    chart1 = echarts.init(chart1);
+                    chart1.setOption(option1);
+                },
+            });
+        });
+    window.onresize = function(){
+        chart1.resize()
+    };
+    </script>
+</body>

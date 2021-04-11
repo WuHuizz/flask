@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--引入css-->
+<link rel="stylesheet" href="../static/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/dist/bootstrap-fileinput/css/fileinput.min.css">
+
+<script src="../static/dist/jquery/jquery-3.5.1.js"></script>
+<script src="../static/dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- the main fileinput plugin file -->
+<script src="../static/dist/bootstrap-fileinput/js/fileinput.min.js"></script>
+<!-- optionally if you need translation for your language then include  locale file as mentioned below -->
+<script src="../static/dist/bootstrap-fileinput/js/locales/zh.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <form method="post" role="form" enctype="multipart/form-data">
+        <input id="input1" name="input1" type="file" multiple class="file-loading" data-browse-on-zone-click="true" data-show-preview="true" >
+    </form>
+</div>
+</body>
+<script>
+    initFileInput();
+      function initFileInput() {
+        $("#input1").fileinput({//#file-5是input框的id
+            language: 'zh',//设置语言为中文
+            removeFromPreviewOnError: true,
+            allowedFileExtensions: ['csv'],
+
+        });
+        $("#input2").fileinput({//#file-5是input框的id
+            language: 'zh',//设置语言为中文
+            removeFromPreviewOnError: true,
+            allowedFileExtensions: ['csv'],
+        });
+      }
+</script>
+
