@@ -157,6 +157,7 @@ def expline_entire_2():
 
 @third_blue.route('/show_explain/single_pps',methods=['POST','GET'])
 def single_pps():
+    start()
     global scaler_x, origin_x, expline_feature, entire_propensitys, predictions,sample_data
     global scaler,feature_name,entire_propensitys,single_propensitys,single_process
     single_process = 0
@@ -183,6 +184,7 @@ def single_pps_process():
 # 1.单一个体-单一属性-不同模型的分析
 @third_blue.route('/show_explain/single_1',methods=['POST','GET'])
 def explain_single_1():
+    start()
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     idx = request.values['example-select']
     modelname = 'lr'
@@ -199,6 +201,7 @@ def explain_single_1():
 #单一个体-单一模型-不同属性的分析
 @third_blue.route('/show_explain/single_2',methods=['POST','GET'])
 def explain_single_2():
+    start()
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     idx = request.values['example-select']
     model_name = name2model[request.values['model_name']]
@@ -212,6 +215,7 @@ def explain_single_2():
 
 @third_blue.route('/show_explain/single_3',methods=['POST','GET'])
 def explain_single_3():
+    start()
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     model_name = name2model[request.values['model_name']]
     feature_name = request.values['feature_name']
