@@ -107,6 +107,7 @@ def explain_s():
 
 @third_blue.route('/show_explain/entire_pps',methods=['POST','GET'])
 def entire_pps():
+    start()
     global entire_process
     global entire_propensitys,origin_x,feature_name,scaler_x,seed
     entire_process = 0
