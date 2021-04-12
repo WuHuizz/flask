@@ -507,14 +507,14 @@
             });
         </script>
         <script>
-            var chart1 = document.getElementById("chart1")
-            var entire_bt_1 = document.getElementById("entire_bt_1");
-            chart1 = echarts.init(chart1);
-            entire_bt_1.addEventListener('click',function(){
+            var single_chart1 = document.getElementById("chart3")
+            var single_bt_1 = document.getElementById("single_bt_1")
+            single_chart1 = echarts.init(single_chart1)
+            single_bt_1.addEventListener('click',function(){
                 $.ajax({
                     type: "POST",
-                    url:"/show_explain/entire_1",
-                    data:$('#entire_fm_1').serialize(),
+                    url:"/show_explain/single_1",
+                    data:$('#single_fm_1').serialize(),
                     dataType:'json',
                     success:function (data){
                         var seriesArr = []
@@ -548,21 +548,21 @@
                             ]
                         };
 
-                        chart1.setOption(option1);
+                        single_chart1.setOption(option1);
 
                     },
                 });
             });
         </script>
         <script>
-            var chart2 = document.getElementById("chart2")
-            var entire_bt_2 = document.getElementById("entire_bt_2");
-            chart2 = echarts.init(chart2);
-            entire_bt_2.addEventListener('click',function(){
+            var single_chart2 = document.getElementById("chart4")
+            var single_bt_2 = document.getElementById("single_bt_2");
+            single_chart2 = echarts.init(single_chart2);
+            single_bt_2.addEventListener('click',function(){
                 $.ajax({
                     type: "POST",
-                    url:"/show_explain/entire_2",
-                    data:$('#entire_fm_2').serialize(),
+                    url:"/show_explain/single_2",
+                    data:$('#single_fm_2').serialize(),
                     dataType:'json',
                     success:function (data){
                         var seriesArr = []
@@ -595,31 +595,40 @@
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'}
                             ]
                         };
-                        chart2.setOption(option2);
+                        single_chart2.setOption(option2);
                     },
                 });
             });
         </script>
         <script>
-            function get_options(data){
-                var seriesArr = []
-                for (var i=0;i<data.lines;i++)
-                {
-                    seriesArr.push({type: 'line', smooth: true, seriesLayoutBy: 'row'})
-                }
-                var option2 = {
-                    legend: {},
-                    tooltip: {
-                        trigger: 'axis',
-                        showContent: true
-                    },
-                    dataset: {
-                        source:data.data
-                    },
-                    xAxis: {type: 'category', show:false},
-                    yAxis: {gridIndex: 0},
+            var single_chart3 = document.getElementById("chart5")
+            var single_bt_3 = document.getElementById("single_bt_3");
+            single_chart3 = echarts.init(single_chart3);
+            single_bt_3.addEventListener('click',function(){
+                $.ajax({
+                    type: "POST",
+                    url:"/show_explain/single_3",
+                    data:$('#single_fm_3').serialize(),
+                    dataType:'json',
+                    success:function (data){
+                        var seriesArr = []
+                        for (var i=0;i<data.lines;i++)
+                        {
+                            seriesArr.push({type: 'line', smooth: true, seriesLayoutBy: 'row'})
+                        }
+                        var option3 = {
+                            legend: {},
+                            tooltip: {
+                                trigger: 'axis',
+                                showContent: true
+                            },
+                            dataset: {
+                                source:data.data
+                            },
+                            xAxis: {type: 'category', show:false},
+                            yAxis: {gridIndex: 0},
 
-                    series: [
+                            series: [
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
@@ -630,58 +639,14 @@
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                                 {type: 'line', smooth: true, seriesLayoutBy: 'row'}
-
-                    ]
-                };
-                return option2;
-            }
-            var single_bt_1 = document.getElementById("single_bt_1");
-            var single_bt_2 = document.getElementById('single_bt_2');
-            var single_bt_3 = document.getElementById('single_bt_3');
-            
-            var single_chart1 ;
-            var single_chart2 ;
-            var single_chart3 ;
-            single_chart1 = echarts.init(document.getElementById("chart3"))
-            single_chart2 = echarts.init(document.getElementById("chart4"))
-            single_chart3 = echarts.init(document.getElementById("chart5"))
-            single_bt_1.addEventListener('click',function(){
-                $.ajax({
-                    type: "POST",
-                    url:"/show_explain/single_1",
-                    data:$('#single_fm_1').serialize(),
-                    dataType:'json',
-                    success:function (data){
-                        var option2 = get_options(data)
-                        single_chart1.setOption(option2);
-                    },
-                });
-            });
-            single_bt_2.addEventListener('click',function(){
-                $.ajax({
-                    type: "POST",
-                    url:"/show_explain/single_2",
-                    data:$('#single_fm_2').serialize(),
-                    dataType:'json',
-                    success:function (data){
-                        var option2 = get_options(data)
-                        single_chart2.setOption(option2);
-                    },
-                });
-            });
-            single_bt_3.addEventListener('click',function(){
-                $.ajax({
-                    type: "POST",
-                    url:"/show_explain/single_3",
-                    data:$('#single_fm_3').serialize(),
-                    dataType:'json',
-                    success:function (data){
-                        var option2 = get_options(data)
-                        single_chart3.setOption(option2);
+                            ]
+                        };
+                        single_chart3.setOption(option3);
                     },
                 });
             });
         </script>
+
         <script>
             window.onresize = function(){
                 chart1.resize();
@@ -751,13 +716,13 @@
             get_date();
              document.getElementById("single_exp").style.width = '0%';
         })
-        var single = document.getElementById("sigle_tab")
-        var single_chart1 ;
-        var single_chart2 ;
-        var single_chart3 ;
-        single_chart1 = echarts.init(document.getElementById("chart3"))
-        single_chart2 = echarts.init(document.getElementById("chart4"))
-        single_chart3 = echarts.init(document.getElementById("chart5"))
+        {#var single = document.getElementById("sigle_tab")#}
+        {#var single_chart1 ;#}
+        {#var single_chart2 ;#}
+        {#var single_chart3 ;#}
+        {#single_chart1 = echarts.init(document.getElementById("chart3"))#}
+        {#single_chart2 = echarts.init(document.getElementById("chart4"))#}
+        {#single_chart3 = echarts.init(document.getElementById("chart5"))#}
 
     </script>
     </body>
