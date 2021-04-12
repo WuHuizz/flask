@@ -157,7 +157,7 @@ def expline_entire_2():
 
 @third_blue.route('/show_explain/single_pps',methods=['POST','GET'])
 def single_pps():
-    
+    start()
     global scaler_x, origin_x, expline_feature, entire_propensitys, predictions,sample_data
     global scaler,feature_name,entire_propensitys,single_propensitys,single_process
     single_process = 0
