@@ -185,6 +185,7 @@ def single_pps_process():
 @third_blue.route('/show_explain/single_1',methods=['POST','GET'])
 def explain_single_1():
     start()
+    global origin_x, scaler_x, predictions
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     idx = request.values['example-select']
     modelname = 'lr'
@@ -203,6 +204,7 @@ def explain_single_1():
 @third_blue.route('/show_explain/single_2',methods=['POST','GET'])
 def explain_single_2():
     start()
+    global origin_x, scaler_x, predictions
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     idx = request.values['example-select']
     model_name = name2model[request.values['model_name']]
@@ -218,6 +220,7 @@ def explain_single_2():
 @third_blue.route('/show_explain/single_3',methods=['POST','GET'])
 def explain_single_3():
     start()
+    global origin_x, scaler_x, predictions
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     model_name = name2model[request.values['model_name']]
     feature_name = request.values['feature_name']
