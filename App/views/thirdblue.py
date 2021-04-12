@@ -196,6 +196,7 @@ def explain_single_1():
     models = [c for c in predictions]
     for i in range(len(models)):
         data.append([models[i]] + yy[i])
+    print(data)
     return jsonify({"data":data,"lines":len(models)})
 
 #单一个体-单一模型-不同属性的分析
@@ -210,6 +211,7 @@ def explain_single_2():
     data = [['x']+xx]
     for i in range(len(expline_feature)):
         data.append([expline_feature[i]]+yy[i])
+    print(data)
     return jsonify({"data": data, "lines": len(expline_feature)})
 
 
@@ -223,6 +225,7 @@ def explain_single_3():
     data = [['x'] + xx]
     for i in range(4):
         data.append(['第{}个样本'.format(i+1)] + yy[i])
+    print(data)
     return jsonify({"data": data, "lines": 4})
 
 @third_blue.route('/show_explain/reflash',methods=['POST','GET'])
