@@ -107,7 +107,6 @@ def explain_s():
 
 @third_blue.route('/show_explain/entire_pps',methods=['POST','GET'])
 def entire_pps():
-    start()
     global entire_process
     global entire_propensitys,origin_x,feature_name,scaler_x,seed
     entire_process = 0
@@ -131,7 +130,6 @@ def show_pps_process():
 
 @third_blue.route('/show_explain/entire_1',methods=['POST','GET'])
 def expline_entire_1():
-    start()
     global expline_feature,origin_x,scaler_x,entire_propensitys,predictions
     model_name = request.values['model_name']
     model_name = name2model[model_name]
@@ -143,7 +141,6 @@ def expline_entire_1():
 
 @third_blue.route('/show_explain/entire_2',methods=['POST','GET'])
 def expline_entire_2():
-    start()
     global expline_feature, origin_x, scaler_x, entire_propensitys, predictions
     models = [c for c in predictions]
     feature_name = request.values['feature_name']
@@ -158,7 +155,6 @@ def expline_entire_2():
 
 @third_blue.route('/show_explain/single_pps',methods=['POST','GET'])
 def single_pps():
-    start()
     global scaler_x, origin_x, expline_feature, entire_propensitys, predictions,sample_data
     global scaler,feature_name,entire_propensitys,single_propensitys,single_process
     single_process = 0
@@ -185,8 +181,6 @@ def single_pps_process():
 # 1.单一个体-单一属性-不同模型的分析
 @third_blue.route('/show_explain/single_1',methods=['POST','GET'])
 def explain_single_1():
-    start()
-    global origin_x, scaler_x, predictions
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     idx = request.values['example-select']
     modelname = 'lr'
@@ -204,8 +198,6 @@ def explain_single_1():
 #单一个体-单一模型-不同属性的分析
 @third_blue.route('/show_explain/single_2',methods=['POST','GET'])
 def explain_single_2():
-    start()
-    global origin_x, scaler_x, predictions
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     idx = request.values['example-select']
     model_name = name2model[request.values['model_name']]
@@ -220,8 +212,6 @@ def explain_single_2():
 
 @third_blue.route('/show_explain/single_3',methods=['POST','GET'])
 def explain_single_3():
-    start()
-    global origin_x, scaler_x, predictions
     global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
     model_name = name2model[request.values['model_name']]
     feature_name = request.values['feature_name']
