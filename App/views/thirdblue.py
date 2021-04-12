@@ -130,6 +130,7 @@ def show_pps_process():
 
 @third_blue.route('/show_explain/entire_1',methods=['POST','GET'])
 def expline_entire_1():
+    start()
     global expline_feature,origin_x,scaler_x,entire_propensitys,predictions
     model_name = request.values['model_name']
     model_name = name2model[model_name]
@@ -141,6 +142,7 @@ def expline_entire_1():
 
 @third_blue.route('/show_explain/entire_2',methods=['POST','GET'])
 def expline_entire_2():
+    start()
     global expline_feature, origin_x, scaler_x, entire_propensitys, predictions
     models = [c for c in predictions]
     feature_name = request.values['feature_name']
