@@ -638,7 +638,13 @@
             var single_bt_1 = document.getElementById("single_bt_1");
             var single_bt_2 = document.getElementById('single_bt_2');
             var single_bt_3 = document.getElementById('single_bt_3');
-            single_chart1 =
+            
+            var single_chart1 ;
+            var single_chart2 ;
+            var single_chart3 ;
+            single_chart1 = echarts.init(document.getElementById("chart3"))
+            single_chart2 = echarts.init(document.getElementById("chart4"))
+            single_chart3 = echarts.init(document.getElementById("chart5"))
             single_bt_1.addEventListener('click',function(){
                 $.ajax({
                     type: "POST",
