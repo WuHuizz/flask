@@ -507,100 +507,6 @@
             });
         </script>
         <script>
-            var chart1 = document.getElementById("chart1")
-            var entire_bt_1 = document.getElementById("entire_bt_1");
-            chart1 = echarts.init(chart1);
-            entire_bt_1.addEventListener('click',function(){
-                $.ajax({
-                    type: "POST",
-                    url:"/show_explain/entire_1",
-                    data:$('#entire_fm_1').serialize(),
-                    dataType:'json',
-                    success:function (data){
-                        var seriesArr = []
-                        for (var i=0;i<data.lines;i++)
-                        {
-                            seriesArr.push({type: 'line', smooth: true, seriesLayoutBy: 'row'})
-                        }
-                        var option1 = {
-                            legend: {},
-                            tooltip: {
-                                trigger: 'axis',
-                                showContent: true
-                            },
-                            dataset: {
-                                source:data.data
-                            },
-                            xAxis: {type: 'category', show:false},
-                            yAxis: {gridIndex: 0},
-
-                            series: [
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'}
-                            ]
-                        };
-
-                        chart1.setOption(option1);
-
-                    },
-                });
-            });
-        </script>
-        <script>
-            var chart2 = document.getElementById("chart2")
-            var entire_bt_2 = document.getElementById("entire_bt_2");
-            chart2 = echarts.init(chart2);
-            entire_bt_2.addEventListener('click',function(){
-                $.ajax({
-                    type: "POST",
-                    url:"/show_explain/entire_2",
-                    data:$('#entire_fm_2').serialize(),
-                    dataType:'json',
-                    success:function (data){
-                        var seriesArr = []
-                        for (var i=0;i<data.lines;i++)
-                        {
-                            seriesArr.push({type: 'line', smooth: true, seriesLayoutBy: 'row'})
-                        }
-                        var option2 = {
-                            legend: {},
-                            tooltip: {
-                                trigger: 'axis',
-                                showContent: true
-                            },
-                            dataset: {
-                                source:data.data
-                            },
-                            xAxis: {type: 'category', show:false},
-                            yAxis: {gridIndex: 0},
-
-                            series: [
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'}
-                            ]
-                        };
-                        chart2.setOption(option2);
-                    },
-                });
-            });
-        </script>
-        <script>
             function get_options(data){
                 var seriesArr = []
                 for (var i=0;i<data.lines;i++)
@@ -619,26 +525,16 @@
                     xAxis: {type: 'category', show:false},
                     yAxis: {gridIndex: 0},
 
-                    series: [
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                                {type: 'line', smooth: true, seriesLayoutBy: 'row'}
-
-                    ]
+                    series: seriesArr
                 };
                 return option2;
             }
             var single_bt_1 = document.getElementById("single_bt_1");
             var single_bt_2 = document.getElementById('single_bt_2');
             var single_bt_3 = document.getElementById('single_bt_3');
-            single_chart1 =
+            var single_chart1 = echarts.init(document.getElementById("chart3"))
+            var single_chart2 = echarts.init(document.getElementById('chart4'))
+            var single_chart3 = echarts.init(document.getElementById('chart5'))
             single_bt_1.addEventListener('click',function(){
                 $.ajax({
                     type: "POST",
@@ -678,8 +574,6 @@
         </script>
         <script>
             window.onresize = function(){
-                chart1.resize();
-                chart2.resize();
                 single_chart1.resize();
                 single_chart2.resize();
                 single_chart3.resize();
@@ -688,6 +582,7 @@
     <script>
         function listen(element,show_url,process_url){
             element.addEventListener('click',function(){
+                document.getElementById(element.name).style.width = '0%'
                 var sitv = setInterval(function (){
                  $.getJSON(show_url,function(data){
                      console.log(data.res+'%')
@@ -697,12 +592,11 @@
                      }
                  })
             },500);
-
                 $.getJSON(process_url,function (data){
                     clearInterval(sitv)
                     if(data.res != null){
-                        document.getElementById(element.name).style.width = '100%'
                         alert("完成计算")
+                        document.getElementById(element.name).style.width = '100%'
                     }
                     else{
                         document.getElementById(element.name).class = 'progress-bar-danger'
@@ -739,19 +633,10 @@
                     }
                 });
         }
-
         var reflash = document.getElementById('refresh')
         reflash.addEventListener('click',function (){
             get_date();
-             document.getElementById("single_exp").style.width = '0%';
+            document.getElementById("single_exp").style.width = '0%';
         })
-        var single = document.getElementById("sigle_tab")
-        var single_chart1 ;
-        var single_chart2 ;
-        var single_chart3 ;
-        single_chart1 = echarts.init(document.getElementById("chart3"))
-        single_chart2 = echarts.init(document.getElementById('chart4'))
-        single_chart3 = echarts.init(document.getElementById('chart5'))
-
     </script>
     </body>

@@ -6,3 +6,5 @@ manager = Manager(app=app)
 if __name__ == '__main__':
     manager.run()
 
+# def run_app():
+#     manager.run()

@@ -132,6 +132,7 @@ def entire_interpretability_2(x,feature_input,model_name, train_features,propens
 
 # 倾向评分预计算_个体可解释
 def individual_propensity_score(X,train_feature, feature_input, train_feature_value_minmaxScaler, seed,is_entire=False):
+    print(feature_input)
     propensitys, propensitys_x = pd.DataFrame(columns=feature_input), pd.DataFrame(columns=feature_input)
     for feature in feature_input:
         input_x = train_feature.columns.get_loc(feature)

@@ -29,13 +29,18 @@ model2name = {
 name2model = {value:key for (key,value) in model2name.items()}
 third_blue = Blueprint('third_blue',__name__)
 
-scaler_x, scaler_y, origin_x, origin_y, feature_name, sample_data,sample_feature = None, None, None, None, None,None,None
+scaler_x, scaler_y, scaler,origin_x, origin_y, feature_name, sample_data,sample_feature = None, None, None, None, None,None,None,None
 entire_propensitys,predictions,scaler,single_propensitys= None,None,None,None
 expline_feature = []
-
-
-
+def print_x():
+    global scaler_x, scaler_y, origin_x, origin_y, feature_name, sample_data,sample_feature
+    global entire_propensitys,predictions,scaler,single_propensitys,scaler
+    print("scaler_x:{}, scaler_y:{}, origin_x:{}, origin_y:{}, feature_name:{}, sample_data,sample_feature:{}".format(scaler_x, scaler_y, origin_x, origin_y, feature_name, sample_data,sample_feature))
+    print("entire_propensitys:{},predictions:{},scaler:{},single_propensitys:{}".format(entire_propensitys,predictions,scaler,single_propensitys))
+    print("scaler",scaler)
+    print("expline_feature",expline_feature)
 def get_exp_f():
+    global expline_feature
     if os.path.exists(os.path.join('App/static/datas', 'features.pkl')):
         expline_feature = pkl.load(open(os.path.join('App/static/datas', 'features.pkl'), 'rb'))
         print(expline_feature)
@@ -48,6 +53,7 @@ entire_process, single_process = 0, 0
 def start():
     global scaler_x, scaler_y, origin_x, origin_y, feature_name,entire_propensitys,seed,predictions
     global scaler,sample_feature,sample_data,expline_feature
+    expline_feature = get_exp_f()
     scaler_x_path = 'App/static/datas/train_x_scaler.pkl'
     scaler_y_path = 'App/static/datas/train_y_scaler.pkl'
     origin_x_path = 'App/static/datas/train_x_origin.pkl'
@@ -71,13 +77,13 @@ def start():
         origin_x = pkl.load(open(origin_x_path, 'rb'))
         origin_y = pkl.load(open(origin_x_path, 'rb'))
         scaler = pkl.load(open(scaler_path, 'rb'))
-    expline_feature = get_exp_f()
+    
     predictions = pkl.load(open('App/static/predictions/total_predictions.pkl','rb'))
     sample_feature,sample_data = show_sample(origin_x)
-
 @third_blue.route('/explain',methods=['POST','GET'])
 def explain():
     start()
+    print_x()
     path = 'App/static/models/*'
     dirlist = glob(path)
     model_name = []
@@ -92,6 +98,7 @@ def explain():
 @third_blue.route('/explain_s',methods=['POST','GET'])
 def explain_s():
     start()
+    print_x()
     if os.path.exists("App/static/propensitys/single_propensitys.csv"):
         os.remove("App/static/propensitys/single_propensitys.csv")
     path = 'App/static/models/*'
@@ -131,6 +138,15 @@ def show_pps_process():
 @third_blue.route('/show_explain/entire_1',methods=['POST','GET'])
 def expline_entire_1():
     global expline_feature,origin_x,scaler_x,entire_propensitys,predictions
+    if len(expline_feature) == 0 or expline_feature is None:
+        expline_feature = get_exp_f()
+    if entire_propensitys is None:
+        entire_propensitys = pd.read_csv('App/static/propensitys/entire_propensitys.csv')
+    if predictions is None:
+        predictions = pkl.load(open('App/static/predictions/total_predictions.pkl','rb'))
+    if origin_x is None:
+        scaler_x = pkl.load(open("App/static/datas/train_x_scaler.pkl", 'rb'))
+        origin_x = pkl.load(open("App/static/datas/train_x_origin.pkl", 'rb'))
     model_name = request.values['model_name']
     model_name = name2model[model_name]
     xx, yy = entire_interpretability_1(0,expline_feature,model_name, origin_x,entire_propensitys,predictions)
@@ -142,6 +158,15 @@ def expline_entire_1():
 @third_blue.route('/show_explain/entire_2',methods=['POST','GET'])
 def expline_entire_2():
     global expline_feature, origin_x, scaler_x, entire_propensitys, predictions
+    if len(expline_feature) == 0 or expline_feature is None:
+        expline_feature = get_exp_f()
+    if entire_propensitys is None:
+        entire_propensitys = pd.read_csv('App/static/propensitys/entire_propensitys.csv')
+    if predictions is None:
+        predictions = pkl.load(open('App/static/predictions/total_predictions.pkl','rb'))
+    if origin_x is None:
+        scaler_x = pkl.load(open("App/static/datas/train_x_scaler.pkl", 'rb'))
+        origin_x = pkl.load(open("App/static/datas/train_x_origin.pkl", 'rb'))
     models = [c for c in predictions]
     feature_name = request.values['feature_name']
     model_name = '逻辑回归'
@@ -162,26 +187,36 @@ def single_pps():
     if entire_propensitys is not None:
         is_entire = True
     X = sample_data
+    if scaler is None:
+        scaler = pkl.load(open('App/static/datas/scaler.pkl', 'rb'))
     X = scaler.transform(X)
     entire_propensitys, single_propensitys = individual_propensity_score(X,origin_x,feature_name,scaler_x,seed,is_entire=is_entire)
     single_process = 100
+    sleep(1)
     return jsonify({'res': single_process})
 
 @third_blue.route('/show_explain/single_pps_show',methods=['POST','GET'])
 def single_pps_process():
     global single_process
-
-    if os.path.exists('App/static/propensitys/single_propensitys.csv') and os.path.exists('App/static/propensitys/entire_propensitys.csv'):
-        single_process = 100
-    else:
-        single_process += 1
-        single_process = 95 if single_process >= 95 else single_process
+    single_process += 1
+    single_process = 99 if single_process >= 99 else single_process
     return jsonify({'res': single_process})
 
 # 1.单一个体-单一属性-不同模型的分析
 @third_blue.route('/show_explain/single_1',methods=['POST','GET'])
 def explain_single_1():
-    global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
+    global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature,origin_x,predictions,origin_x
+    print("expline_feature",expline_feature)
+    if len(expline_feature) == 0 or expline_feature is None:
+        expline_feature = get_exp_f()
+    if entire_propensitys is None:
+        entire_propensitys = pd.read_csv('App/static/propensitys/entire_propensitys.csv')
+    if single_propensitys is None:
+        single_propensitys = pd.read_csv('App/static/propensitys/single_propensitys.csv')
+    if predictions is None:
+        predictions = pkl.load(open('App/static/predictions/total_predictions.pkl','rb'))
+    if origin_x is None:
+        origin_x = pkl.load(open(origin_x_path, 'rb'))
     idx = request.values['example-select']
     modelname = 'lr'
     feature_name = request.values['feature_name']
@@ -198,7 +233,18 @@ def explain_single_1():
 #单一个体-单一模型-不同属性的分析
 @third_blue.route('/show_explain/single_2',methods=['POST','GET'])
 def explain_single_2():
-    global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
+    print("--2--开始分析...")
+    global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature,origin_x,predictions
+    if len(expline_feature) == 0 or expline_feature is None:
+        expline_feature = get_exp_f()
+    if entire_propensitys is None:
+        entire_propensitys = pd.read_csv('App/static/propensitys/entire_propensitys.csv')
+    if single_propensitys is None:
+        single_propensitys = pd.read_csv('App/static/propensitys/single_propensitys.csv')
+    if predictions is None:
+        predictions = pkl.load(open('App/static/predictions/total_predictions.pkl','rb'))
+    if origin_x is None:
+        origin_x = pkl.load(open(origin_x_path, 'rb'))
     idx = request.values['example-select']
     model_name = name2model[request.values['model_name']]
     feature_name = ""
@@ -206,20 +252,29 @@ def explain_single_2():
     data = [['x']+xx]
     for i in range(len(expline_feature)):
         data.append([expline_feature[i]]+yy[i])
-    print(data)
+    print("--2--结束分析...")
     return jsonify({"data": data, "lines": len(expline_feature)})
 
 
 @third_blue.route('/show_explain/single_3',methods=['POST','GET'])
 def explain_single_3():
-    global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature
+    global scaler, feature_name, entire_propensitys, single_propensitys, single_process,expline_feature,predictions,origin_x
+    if len(expline_feature) == 0 or expline_feature is None:
+        expline_feature = get_exp_f()
+    if entire_propensitys is None:
+        entire_propensitys = pd.read_csv('App/static/propensitys/entire_propensitys.csv')
+    if single_propensitys is None:
+        single_propensitys = pd.read_csv('App/static/propensitys/single_propensitys.csv')
+    if predictions is None:
+        predictions = pkl.load(open('App/static/predictions/total_predictions.pkl','rb'))
+    if origin_x is None:
+        origin_x = pkl.load(open(origin_x_path, 'rb'))
     model_name = name2model[request.values['model_name']]
     feature_name = request.values['feature_name']
     xx, yy = individual_interpretability_3(0,expline_feature.index(feature_name),expline_feature,model_name,origin_x,entire_propensitys,single_propensitys,predictions)
     data = [['x'] + xx]
     for i in range(4):
         data.append(['第{}个样本'.format(i+1)] + yy[i])
-    print(data)
     return jsonify({"data": data, "lines": 4})
 
 @third_blue.route('/show_explain/reflash',methods=['POST','GET'])
