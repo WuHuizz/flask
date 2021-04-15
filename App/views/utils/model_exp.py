@@ -270,7 +270,7 @@ def individual_interpretability_2(x,y,feature_input,model_name,train_features,pr
                 dis = abs(p - train_feature_sort.iloc[d]['propensity'])
                 pos = d
         # 上下窗口选取  选取总体数据的 1/50
-        total = len(train_feature) / 50
+        total = len(train_feature) / 20
         if pos - total / 2 < 0:
             front = 0
             after = front + total
@@ -341,7 +341,7 @@ def individual_interpretability_3(x,y,feature_input,model_name,train_features,pr
                 pos = d
         # 上下窗口选取
         # 选取总体数据的 1/100 ；多个个体容易曲线重合，需要较小窗口
-        total = len(train_feature) / 50
+        total = len(train_feature) / 20
         if pos - total / 2 < 0:
             front = 0
             after = front + total
