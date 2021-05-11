@@ -115,11 +115,11 @@ def explain_s():
 @third_blue.route('/show_explain/entire_pps',methods=['POST','GET'])
 def entire_pps():
     global entire_process
-    global entire_propensitys,origin_x,feature_name,scaler_x,seed
+    global entire_propensitys,origin_x,feature_name,scaler_x,seed,predictions
     entire_process = 0
     propensitys_path = 'App/static/propensitys/entire_propensitys.csv'
     if not os.path.exists(propensitys_path):
-        entire_propensitys = entire_propensity_score(train_feature=origin_x, feature_input=feature_name, train_feature_value_minmaxScaler=scaler_x,seed=seed)
+        entire_propensitys = entire_propensity_score(train_feature=origin_x, feature_input=feature_name, train_feature_value_minmaxScaler=scaler_x,seed=seed,predictions=predictions)
     else:
         entire_propensitys = pd.read_csv(propensitys_path)
     entire_process = 100
