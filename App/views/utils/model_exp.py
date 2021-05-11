@@ -15,8 +15,15 @@ features = ['可用额度','年龄','逾期30-59天笔数','负债率','月收�
 paths = {}
 for f in features:
     paths[f]='App/static/pps_models/{}.pkl'.format(f)
-
+paths_sort = {}
+for f in features:
+    paths_sort[f] = 'App/static/train_feature_sort/{}.csv'.format(f)
+    
 def entire_propensity_score(train_feature,feature_input,train_feature_value_minmaxScaler,seed):
+    model2name = ['lr','dt','mlp','rf']
+    for model_name in model2name:
+        train_feature[model_name] = predictions[model_name].values
+    
     propensitys = pd.DataFrame(columns=feature_input)
     for feature in feature_input:
         input_x = train_feature.columns.get_loc(feature)
@@ -35,6 +42,12 @@ def entire_propensity_score(train_feature,feature_input,train_feature_value_minm
         # 总体倾向分
         propensity = gridsearch.predict(train)
         propensitys[feature] = propensity
+        
+        #保存排序
+        if not os.path.exists(paths_sort[feature]):
+            train_feature['propensity'] = propensitys[feature].values
+            train_feature_sort = train_feature.sort_values(by=['propensity'], ascending=False)
+            train_feature_sort.to_csv(paths_sort[feature],index=False)
 
     propensitys.to_csv('App/static/propensitys/entire_propensitys.csv',index=False)
 
@@ -256,12 +269,14 @@ def individual_interpretability_2(x,y,feature_input,model_name,train_features,pr
         # 选择第几个样本
         input_x = propensitys_x.columns.get_loc(feature)
         p = propensitys_x.iat[x, input_x]
-        train_feature['propensity'] = propensitys[feature].values
-        #for i in range(predictions.shape[1]):
-        #['model{}'.format(y)] = predictions.iloc[:, y].values
-        train_feature[model_name] = predictions[model_name].values
-        # 排序
-        train_feature_sort = train_feature.sort_values(by=['propensity'], ascending=False)
+        
+        if os.path.exists(paths_sort[feature]):
+            train_feature_sort = pd.read_csv(paths_sort[feature])
+        else:
+            train_feature['propensity'] = propensitys[feature].values
+            train_feature[model_name] = predictions[model_name].values
+            train_feature_sort = train_feature.sort_values(by=['propensity'], ascending=False)
+
         # 查找
         dis = 999
         pos = 0
@@ -269,6 +284,9 @@ def individual_interpretability_2(x,y,feature_input,model_name,train_features,pr
             if abs(p - train_feature_sort.iloc[d]['propensity']) < dis:
                 dis = abs(p - train_feature_sort.iloc[d]['propensity'])
                 pos = d
+            if dis < 0.01:
+                break
+                
         # 上下窗口选取  选取总体数据的 1/50
         total = len(train_feature) / 20
         if pos - total / 2 < 0:
@@ -322,16 +340,18 @@ def individual_interpretability_3(x,y,feature_input,model_name,train_features,pr
     # 选择第几个样本
     xx = np.linspace(0, 1, 100)
     yy_predict_alls = []
+    
+    if os.path.exists(paths_sort[feature_input[y]]):
+        train_feature_sort = pd.read_csv(paths_sort[feature_input[y]])
+    else:
+        train_feature['propensity'] = propensitys[feature_input[y]].values
+        train_feature[model_name] = predictions[model_name].values
+        train_feature_sort = train_feature.sort_values(by=['propensity'], ascending=False)
+    
     for i in range(propensitys_x_read.shape[0]):
 
         p = propensitys_x.iat[i, propensitys_x.columns.get_loc(feature_input[y])]
 
-        train_feature['propensity'] = propensitys[feature_input[y]].values
-        #for i in range(predictions.shape[1]):
-        #train_feature['model{}'.format(x)] = predictions.iloc[:, x].values
-        train_feature[model_name] = predictions[model_name].values
-        # 排序
-        train_feature_sort = train_feature.sort_values(by=['propensity'], ascending=False)
         # 查找
         dis = 999
         pos = 0
@@ -339,6 +359,8 @@ def individual_interpretability_3(x,y,feature_input,model_name,train_features,pr
             if abs(p - train_feature_sort.iloc[d]['propensity']) < dis:
                 dis = abs(p - train_feature_sort.iloc[d]['propensity'])
                 pos = d
+            if dis < 0.01:
+                break
         # 上下窗口选取
         # 选取总体数据的 1/100 ；多个个体容易曲线重合，需要较小窗口
         total = len(train_feature) / 20
